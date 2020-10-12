@@ -7,7 +7,7 @@ main(int argc, char *argv[])
 {
   int p1[2], p2[2];
   int pid = fork();
-  char c[] = "";
+  char c = 'c';
 
   pipe(p1);
   pipe(p2);
