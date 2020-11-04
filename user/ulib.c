@@ -14,6 +14,7 @@ strcpy(char *s, const char *t)
   return os;
 }
 
+// If c_str p equals c_str q, return 0, else return p_i - q_i where p_i != q_i
 int
 strcmp(const char *p, const char *q)
 {

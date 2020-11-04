@@ -229,7 +229,7 @@ uint64
 uvmalloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz)
 {
   char *mem;
-  uint64 a;
+  uint64 a;  // Virtual adress point to the base of a new page
 
   if(newsz < oldsz)
     return oldsz;
@@ -237,6 +237,7 @@ uvmalloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz)
   oldsz = PGROUNDUP(oldsz);
   for(a = oldsz; a < newsz; a += PGSIZE){
     mem = kalloc();
+    // Shrink to origin size if kalloc failed
     if(mem == 0){
       uvmdealloc(pagetable, a, oldsz);
       return 0;

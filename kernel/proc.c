@@ -41,6 +41,8 @@ procinit(void)
       kvmmap(va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
       p->kstack = va;
   }
+  // Reload the kernel page table into satp,
+  // so that the h/w knows about the new PTEs
   kvminithart();
 }
 

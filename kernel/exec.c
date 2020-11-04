@@ -39,6 +39,7 @@ exec(char *path, char **argv)
     goto bad;
 
   // Load program into memory.
+  // off denotes offset
   for(i=0, off=elf.phoff; i<elf.phnum; i++, off+=sizeof(ph)){
     if(readi(ip, 0, (uint64)&ph, off, sizeof(ph)) != sizeof(ph))
       goto bad;
@@ -46,6 +47,7 @@ exec(char *path, char **argv)
       continue;
     if(ph.memsz < ph.filesz)
       goto bad;
+    // Dectects overflow
     if(ph.vaddr + ph.memsz < ph.vaddr)
       goto bad;
     uint64 sz1;
@@ -145,6 +147,9 @@ loadseg(pagetable_t pagetable, uint64 va, struct inode *ip, uint offset, uint sz
     pa = walkaddr(pagetable, va + i);
     if(pa == 0)
       panic("loadseg: address should exist");
+    // The program section header’s filesz may be less than the memsz, 
+    // indicating that the gap between them should be filled with zeroes (for C global variables) 
+    // rather than read from the file.
     if(sz - i < PGSIZE)
       n = sz - i;
     else
