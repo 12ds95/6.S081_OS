@@ -64,14 +64,14 @@ find(char *directory, char *pattern)
       printf("ls: cannot stat %s\n", buf);
       continue;
     }
-    if(strcmp(fmtname(buf), ".") == 0 || strcmp(fmtname(buf), "..") == 0){
+    if(strcmp(de.name, pattern) == 0) {
+      printf("%s\n", buf);
+    }
+    if(strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0){
       continue;
     }
     if(st.type == T_DIR){
       find(buf, pattern);
-    }
-    if(strcmp(fmtname(buf), pattern) == 0) {
-      printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
     }
   }
   close(fd);
@@ -80,7 +80,6 @@ find(char *directory, char *pattern)
 int 
 main(int argc, char *argv[])
 {
-  int i = 0;
   if(argc < 3){
     fprintf(2, "Usage find directory pattern\n");
     exit(1);
